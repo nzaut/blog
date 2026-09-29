@@ -15,6 +15,6 @@ export const NAV = [
 
 // TODO: replace the LinkedIn URL with your real profile.
 export const SOCIALS = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/CHANGE-ME' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/enzo-m-6b9413276/' },
   { label: 'Email', href: 'mailto:contact@enzo-m.fr' },
 ];
