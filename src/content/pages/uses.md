@@ -1,7 +1,8 @@
 ---
-layout: ../layouts/Prose.astro
 title: Uses
 description: Hardware, software and tools I use every day.
+nav: true
+order: 80
 ---
 
 *Example list — edit freely.*

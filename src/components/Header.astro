@@ -1,6 +1,8 @@
 ---
 import Logo from './Logo.astro';
-import { NAV } from '../consts';
+import { getNav } from '../lib/content';
+
+const NAV = await getNav();
 const path = Astro.url.pathname;
 ---
 

@@ -11,6 +11,7 @@ const projects = await getProjects();
       <h1>Projects</h1>
       <p>Things I build, maintain, or abandoned with dignity.</p>
     </header>
+    {projects.length === 0 && <p class="meta">Nothing here yet — coming soon.</p>}
     <ul class="grid">
       {projects.map((p) => (
         <li>

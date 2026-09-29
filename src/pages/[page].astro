@@ -1,0 +1,24 @@
+---
+// Renders every file in src/content/pages as /<filename>.
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { getPages } from '../lib/content';
+
+export async function getStaticPaths() {
+  return (await getPages()).map((page) => ({ params: { page: page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const { title, description } = page.data;
+---
+
+<Base {title} {description}>
+  <article class="container narrow">
+    <header class="page-head">
+      <h1>{title}</h1>
+      {description && <p>{description}</p>}
+    </header>
+    <div class="prose"><Content /></div>
+  </article>
+</Base>

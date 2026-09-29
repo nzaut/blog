@@ -41,4 +41,16 @@ const configs = defineCollection({
   }),
 });
 
-export const collections = { blog, projects, configs };
+// Standalone pages (about, uses, ...). Each file becomes /<filename>.
+const pages = defineCollection({
+  loader: glob({ base: './src/content/pages', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    nav: z.boolean().default(false), // show in the header menu
+    order: z.number().default(50),   // menu position, lower = further left
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, projects, configs, pages };
