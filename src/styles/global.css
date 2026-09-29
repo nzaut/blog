@@ -1,33 +1,36 @@
 /* ---------------------------------------------------------------------------
-   Design tokens — the whole visual identity lives here.
-   Change these to test a new art direction.
+   Brand tokens — derived from the logo (italic monoline "e" whose crossbar
+   is an exponential curve). See design/charte.html.
 --------------------------------------------------------------------------- */
 :root {
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, monospace;
 
-  --bg: #f7f6f2;
-  --surface: #efede6;
-  --text: #1b1b19;
-  --muted: #6d6b64;
-  --border: #dedbd1;
-  --accent: #c2410c;
+  --bg: #fbfaf7;
+  --surface: #f3f1ec;
+  --text: #141414;
+  --muted: #6f6d67;
+  --border: #e6e3dc;
+  --accent: #e8590c;
+  --accent-soft: rgb(232 89 12 / .1);
 
+  --slant: -12deg;         /* the logo's italic angle, reused by brand motifs */
+  --stroke: 2px;
   --measure: 42rem;
-  --wide: 60rem;
+  --wide: 62rem;
   --gutter: clamp(1rem, 4vw, 2rem);
-  --radius: 6px;
+  --radius: 10px;
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: #121211;
-  --surface: #1b1b19;
-  --text: #ecebe6;
-  --muted: #9a988f;
-  --border: #2c2b28;
-  --accent: #fb923c;
+  --bg: #0f0f0e;
+  --surface: #191917;
+  --text: #f1efe9;
+  --muted: #98958d;
+  --border: #2a2926;
+  --accent: #ff7a2e;
+  --accent-soft: rgb(255 122 46 / .12);
   color-scheme: dark;
 }
 
@@ -44,7 +47,8 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 400 1.0625rem/1.7 var(--font-body);
+  font: 400 1.0625rem/1.7 var(--font-sans);
+  font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
   display: flex;
@@ -64,19 +68,44 @@ main { flex: 1; }
 a { color: inherit; text-decoration-color: var(--border); text-underline-offset: 3px; transition: color .15s, text-decoration-color .15s; }
 a:hover { color: var(--accent); text-decoration-color: currentColor; }
 
-h1, h2, h3, h4 { font-weight: 500; line-height: 1.2; letter-spacing: -0.01em; }
-h1, .display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; }
+h1, h2, h3, h4 { font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; }
+h1 { letter-spacing: -0.035em; }
+em, i { font-style: italic; }
 
 .mono, time, .meta { font-family: var(--font-mono); font-size: .8125rem; color: var(--muted); letter-spacing: 0; }
 
-::selection { background: var(--accent); color: var(--bg); }
+/* Brand motif: the logo's crossbar — a short slanted accent stroke. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: .75rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+.eyebrow::before {
+  content: '';
+  width: 1rem;
+  height: var(--stroke);
+  border-radius: 2px;
+  background: var(--accent);
+  transform: rotate(-20deg);
+}
 
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.dot { color: var(--accent); }
+
+::selection { background: var(--accent); color: #fff; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
 /* Page header ---------------------------------------------------------------- */
 .page-head { padding-block: clamp(3rem, 10vw, 6rem) 2.5rem; }
-.page-head h1 { font-size: clamp(2.5rem, 7vw, 4rem); margin: 0 0 .5rem; }
-.page-head p { color: var(--muted); margin: 0; max-width: var(--measure); }
+.page-head h1 { font-size: clamp(2.5rem, 7vw, 4.25rem); line-height: 1.02; margin: 0 0 1rem; }
+.page-head p { color: var(--muted); margin: 0; max-width: var(--measure); font-size: 1.125rem; }
 
 /* Lists of entries ----------------------------------------------------------- */
 .entries { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
@@ -88,9 +117,9 @@ h1, .display { font-family: var(--font-display); font-weight: 400; letter-spacin
   padding: 1.1rem 0;
   text-decoration: none;
 }
-.entries .title { font-weight: 500; }
+.entries .title { font-weight: 500; transition: color .15s, transform .2s; }
 .entries .desc { grid-column: 1 / -1; color: var(--muted); font-size: .9375rem; }
-.entries a:hover .title { color: var(--accent); }
+.entries a:hover .title { color: var(--accent); transform: translateX(.25rem); }
 
 .tag {
   display: inline-block;
@@ -102,42 +131,56 @@ h1, .display { font-family: var(--font-display); font-weight: 400; letter-spacin
   padding: .05rem .6rem;
   text-decoration: none;
 }
-a.tag:hover { color: var(--accent); border-color: var(--accent); }
+a.tag:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
 .tags { display: flex; flex-wrap: wrap; gap: .4rem; }
 
 /* Prose (article body) ------------------------------------------------------- */
 .prose { font-size: 1.0625rem; }
 .prose > * + * { margin-top: 1.25em; }
-.prose h2 { font-size: 1.5rem; margin-top: 2.5em; }
+.prose h2 { font-size: 1.55rem; margin-top: 2.5em; }
 .prose h3 { font-size: 1.2rem; margin-top: 2em; }
 .prose p, .prose ul, .prose ol { margin-block: 0; }
 .prose > * + p, .prose > * + ul, .prose > * + ol { margin-top: 1.25em; }
 .prose li + li { margin-top: .35em; }
-.prose a { text-decoration-color: var(--accent); }
+.prose li::marker { color: var(--accent); }
+.prose a { text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; }
 .prose img, .prose svg, .prose video { max-width: 100%; height: auto; }
 .prose img { border-radius: var(--radius); }
 .prose figure { margin-inline: 0; }
 .prose figcaption { font-size: .875rem; color: var(--muted); text-align: center; margin-top: .6rem; }
-.prose hr { border: 0; border-top: 1px solid var(--border); margin-block: 3em; }
-.prose blockquote { margin-inline: 0; padding-left: 1.25rem; border-left: 2px solid var(--accent); color: var(--muted); }
+.prose hr {
+  border: 0;
+  height: var(--stroke);
+  width: 2.5rem;
+  margin: 3em auto;
+  background: var(--accent);
+  border-radius: 2px;
+  transform: rotate(-20deg);
+}
+.prose blockquote {
+  margin-inline: 0;
+  padding: .25rem 0 .25rem 1.25rem;
+  border-left: var(--stroke) solid var(--accent);
+  color: var(--muted);
+  font-style: italic;
+}
 .prose table { width: 100%; border-collapse: collapse; font-size: .9375rem; display: block; overflow-x: auto; }
 .prose th, .prose td { padding: .5rem .75rem; border-bottom: 1px solid var(--border); text-align: left; }
-.prose th { font-weight: 500; }
+.prose th { font-weight: 600; }
+.prose td { font-variant-numeric: tabular-nums; }
 
 .prose :not(pre) > code {
   font-family: var(--font-mono);
   font-size: .875em;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: .1em .35em;
+  border-radius: 6px;
+  padding: .12em .4em;
 }
 .prose pre {
   font-family: var(--font-mono);
   font-size: .85rem;
-  line-height: 1.6;
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--border);
+  line-height: 1.65;
+  padding: 1.1rem 1.35rem;
   border-radius: var(--radius);
   overflow-x: auto;
   background: var(--surface) !important;

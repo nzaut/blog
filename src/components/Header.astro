@@ -1,17 +1,20 @@
 ---
-import { NAV, SITE } from '../consts';
+import Logo from './Logo.astro';
+import { NAV } from '../consts';
 const path = Astro.url.pathname;
-const isHome = path === '/';
 ---
 
 <header class="site-header container">
-  <a href="/" class="brand" aria-label="Home">{isHome ? '' : SITE.name}</a>
+  <a href="/" class="brand" aria-label="Home">
+    <Logo size="1.6rem" />
+    <span class="wordmark">enzo m<span class="dot">.</span></span>
+  </a>
   <nav aria-label="Main">
     {NAV.map(({ href, label }) => (
       <a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>
     ))}
     <button id="theme-toggle" type="button" aria-label="Toggle dark mode">
-      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
     </button>
   </nav>
 </header>
@@ -34,19 +37,33 @@ const isHome = path === '/';
     gap: 1rem;
     padding-block: 1.5rem;
   }
-  .brand { font-family: var(--font-display); font-size: 1.35rem; text-decoration: none; }
-  nav { display: flex; align-items: center; gap: clamp(.75rem, 2.5vw, 1.5rem); flex-wrap: wrap; justify-content: flex-end; }
-  nav a { font-size: .9rem; color: var(--muted); text-decoration: none; }
+  .brand {
+    display: flex; align-items: center; gap: .55rem;
+    text-decoration: none;
+    font-weight: 600; font-size: 1.15rem; letter-spacing: -0.03em;
+  }
+  .brand:hover { color: inherit; }
+  .brand :global(.logo) { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1); }
+  .brand:hover :global(.logo) { transform: rotate(-8deg) scale(1.08); }
+  nav { display: flex; align-items: center; gap: clamp(.75rem, 2.5vw, 1.6rem); flex-wrap: wrap; justify-content: flex-end; }
+  nav a { position: relative; font-size: .9375rem; color: var(--muted); text-decoration: none; }
   nav a:hover, nav a[aria-current] { color: var(--text); }
+  nav a[aria-current]::after {
+    content: '';
+    position: absolute; left: 50%; bottom: -.35rem;
+    width: .9rem; height: var(--stroke);
+    border-radius: 2px;
+    background: var(--accent);
+    transform: translateX(-50%) rotate(-20deg);
+  }
   button {
     display: grid; place-items: center;
     background: none; border: 0; padding: .25rem; cursor: pointer;
     color: var(--muted);
   }
   button:hover { color: var(--accent); }
-  @media (max-width: 520px) {
+  @media (max-width: 560px) {
     .site-header { flex-direction: column; align-items: flex-start; }
     nav { justify-content: flex-start; }
-    .brand:empty { display: none; }
   }
 </style>

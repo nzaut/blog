@@ -1,0 +1,21 @@
+---
+// The brand mark: an italic monoline "e" whose crossbar is an exponential curve.
+// Ink follows currentColor, the curve uses --accent.
+interface Props { size?: string; class?: string; title?: string }
+const { size = '1em', class: className, title } = Astro.props;
+---
+
+<svg
+  class:list={['logo', className]}
+  viewBox="6.5 7 86 86"
+  width={size}
+  height={size}
+  role={title ? 'img' : undefined}
+  aria-label={title}
+  aria-hidden={title ? undefined : 'true'}
+>
+  <g transform="skewX(-12) translate(10 0)" fill="none" stroke-width="10" stroke-linecap="round">
+    <path d="M16 56 C 50 56, 74 52, 84 36 A36 36 0 1 0 76 76" stroke="currentColor" />
+    <path d="M16 56 C 50 56, 74 52, 84 36" stroke="var(--accent)" />
+  </g>
+</svg>

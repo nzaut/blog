@@ -1,0 +1,94 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; font-family: Inter, sans-serif; background:#e7e5df; }
+  .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 16px; }
+  .card { background:#fbfaf7; color:#141414; border-radius: 10px; padding: 18px; display:flex; flex-direction:column; gap: 14px; }
+  .card.dark { background:#101010; color:#f1efe9; }
+  .big { height: 220px; display:grid; place-items:center; }
+  .big svg { height: 150px; width:auto; overflow:visible; }
+  .row { display:flex; align-items:center; gap: 18px; border-top:1px solid #0001; padding-top: 12px; }
+  .dark .row { border-color:#fff2; }
+  .row svg { overflow:visible; }
+  .s32 { height:32px; width:auto } .s16 { height:16px; width:auto }
+  .lock { display:flex; align-items:center; gap:10px; font: 500 15px 'JetBrains Mono', monospace; }
+  .lock svg { height: 26px; width:auto }
+  h3 { margin:0; font: 600 12px Inter; letter-spacing:.06em; text-transform:uppercase; opacity:.55 }
+  .acc { color: #e8590c }
+</style></head>
+<body>
+<div class="grid" id="grid"></div>
+
+<template id="marks">
+  <svg data-name="K1 · sortie (réf.)" viewBox="0 0 100 100">
+    <path d="M84 56 A36 36 0 1 0 76 78" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+    <path d="M16 56 C 48 56, 70 50, 82 30 S 90 8, 92 4" fill="none" class="acc" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>
+  </svg>
+
+  <svg data-name="S1 · continu, barre accent" viewBox="0 0 100 100">
+    <path d="M86 46 A36 36 0 1 0 77.6 69.1" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+    <path d="M14 64 C 52 64, 86 66, 86 46" fill="none" class="acc" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+  </svg>
+
+  <svg data-name="S2 · continu, monochrome + origine" viewBox="0 0 100 100">
+    <path d="M14 64 C 52 64, 86 66, 86 46 A36 36 0 1 0 77.6 69.1" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="14" cy="64" r="8" class="acc" fill="currentColor"/>
+  </svg>
+
+  <svg data-name="K4b · sortie + point" viewBox="0 0 100 100">
+    <path d="M84 56 A36 36 0 1 0 76 78" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+    <path d="M16 56 C 48 56, 70 50, 80 32 S 87 13, 88 9" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="89" cy="6" r="7.5" class="acc" fill="currentColor"/>
+  </svg>
+
+  <svg data-name="K6b · contraste" viewBox="0 0 100 100">
+    <path d="M84 56 A36 36 0 1 0 76 78" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+    <path d="M16 56 C 48 56, 70 50, 82 30 S 90 8, 92 4" fill="none" class="acc" stroke="currentColor" stroke-width="11" stroke-linecap="round"/>
+  </svg>
+
+  <svg data-name="S3 · badge" viewBox="0 0 100 100">
+    <rect width="100" height="100" rx="24" fill="#141414"/>
+    <g transform="translate(14 17) scale(.72)">
+      <path d="M86 46 A36 36 0 1 0 77.6 69.1" fill="none" stroke="#fbfaf7" stroke-width="13" stroke-linecap="round"/>
+      <path d="M14 64 C 52 64, 86 66, 86 46" fill="none" stroke="#e8590c" stroke-width="13" stroke-linecap="round"/>
+    </g>
+  </svg>
+
+  <svg data-name="K1c · badge (sortie)" viewBox="0 0 100 100">
+    <rect width="100" height="100" rx="24" fill="#141414"/>
+    <g transform="translate(12 18) scale(.72)">
+      <path d="M84 56 A36 36 0 1 0 76 78" fill="none" stroke="#fbfaf7" stroke-width="12" stroke-linecap="round"/>
+      <path d="M16 56 C 48 56, 70 50, 82 30 S 90 8, 92 4" fill="none" stroke="#e8590c" stroke-width="11" stroke-linecap="round"/>
+    </g>
+  </svg>
+
+  <svg data-name="S4 · continu fin" viewBox="0 0 100 100">
+    <path d="M86 46 A36 36 0 1 0 77.6 69.1" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+    <path d="M14 64 C 52 64, 86 66, 86 46" fill="none" class="acc" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+  </svg>
+
+  <svg data-name="K1d · sortie monochrome" viewBox="0 0 100 100">
+    <path d="M84 56 A36 36 0 1 0 76 78" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+    <path d="M16 56 C 48 56, 70 50, 82 30 S 90 8, 92 4" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/>
+  </svg>
+</template>
+
+<script>
+  const marks = document.getElementById('marks').content.querySelectorAll('svg');
+  const grid = document.getElementById('grid');
+  marks.forEach((m, i) => {
+    const dark = i % 2 === 1;
+    const card = document.createElement('div');
+    card.className = 'card' + (dark ? ' dark' : '');
+    const clone = () => { const c = m.cloneNode(true); c.removeAttribute('data-name'); return c; };
+    const h = document.createElement('h3'); h.textContent = m.dataset.name; card.append(h);
+    const big = document.createElement('div'); big.className = 'big'; big.append(clone()); card.append(big);
+    const row = document.createElement('div'); row.className = 'row';
+    const a = clone(); a.classList.add('s32'); const b = clone(); b.classList.add('s16');
+    const lock = document.createElement('div'); lock.className = 'lock'; lock.append(clone(), 'enzo-m.fr');
+    row.append(a, b, lock); card.append(row);
+    grid.append(card);
+  });
+</script>
+</body></html>

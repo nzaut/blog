@@ -37,5 +37,5 @@ draft: true        # hidden in production until removed
 
 ## Design
 
-All colours, fonts and spacing are tokens at the top of `src/styles/global.css`.
+Brand guide: `design/charte.html` (logo, colours, type, motifs). All tokens are at the top of `src/styles/global.css`; the logo is `src/components/Logo.astro`.
 Name, tagline, nav and socials live in `src/consts.ts`.

@@ -15,7 +15,7 @@ const categories = Map.groupBy(configs, (c) => c.data.category);
     </header>
     {[...categories].map(([category, items]) => (
       <section>
-        <h2 class="meta">{category}</h2>
+        <h2 class="eyebrow">{category}</h2>
         <ul class="entries">
           {items.map((c) => (
             <li>
@@ -34,5 +34,4 @@ const categories = Map.groupBy(configs, (c) => c.data.category);
 
 <style>
   section + section { margin-top: 3rem; }
-  h2 { font-weight: 400; text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; margin: 0 0 1rem; }
 </style>

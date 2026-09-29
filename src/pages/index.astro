@@ -9,16 +9,20 @@ const recent = (await getPosts()).slice(0, 3);
 
 <Base>
   <section class="hero container">
-    <h1 class="display">{SITE.name}</h1>
-    <p class="tagline">{SITE.tagline}</p>
+    <!-- Brand motif: the logo's exponential crossbar, drawn at scale. -->
+    <svg class="curve" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 560 C 420 560, 700 520, 860 330 S 960 60, 990 0" />
+    </svg>
+    <h1>Enzo M<span class="dot">.</span></h1>
+    <p class="tagline">Building things, <em>writing about how they work.</em></p>
     <ul class="socials">
-      {SOCIALS.map((s) => <li><a href={s.href}>{s.label} <span aria-hidden="true">↗</span></a></li>)}
+      {SOCIALS.map((s) => <li><a href={s.href}>{s.label}<span aria-hidden="true">↗</span></a></li>)}
     </ul>
   </section>
 
   {recent.length > 0 && (
     <section class="container recent">
-      <h2 class="meta">Recent writing</h2>
+      <h2 class="eyebrow">Recent writing</h2>
       <ul class="entries">
         {recent.map((p) => (
           <li>
@@ -35,34 +39,62 @@ const recent = (await getPosts()).slice(0, 3);
 
 <style>
   .hero {
-    min-height: min(62vh, 36rem);
+    position: relative;
+    isolation: isolate;
+    min-height: min(64vh, 38rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-block: 4rem;
+    padding-block: 4rem 5rem;
   }
+  .curve {
+    position: absolute;
+    inset: 8% var(--gutter) 6% 30%;
+    width: auto; height: auto;
+    z-index: -1;
+    overflow: visible;
+  }
+  .curve path {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+    opacity: .9;
+    stroke-dasharray: 1600;
+    stroke-dashoffset: 1600;
+    animation: draw 1.8s cubic-bezier(.6, 0, .2, 1) .2s forwards;
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) { .curve path { animation: none; stroke-dashoffset: 0; } }
+
   h1 {
-    font-size: clamp(4rem, 16vw, 9.5rem);
+    font-size: clamp(4rem, 15vw, 9rem);
     line-height: .9;
+    letter-spacing: -0.055em;
     margin: 0;
   }
   .tagline {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: clamp(1.35rem, 3.2vw, 1.9rem);
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
     color: var(--muted);
-    margin: 1.25rem 0 2.5rem;
-    max-width: 30ch;
-    line-height: 1.3;
+    margin: 1.5rem 0 2.5rem;
+    max-width: 24ch;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
   }
-  .socials { list-style: none; display: flex; flex-wrap: wrap; gap: 1.5rem; padding: 0; margin: 0; }
+  .tagline em { color: var(--text); }
+  .socials { list-style: none; display: flex; flex-wrap: wrap; gap: .75rem; padding: 0; margin: 0; }
   .socials a {
+    display: inline-flex; align-items: center; gap: .4rem;
     font-family: var(--font-mono);
     font-size: .875rem;
     text-decoration: none;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: .15rem;
+    padding: .45rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    background: var(--bg);
+    transition: border-color .15s, color .15s, background .15s;
   }
-  .socials a:hover { border-color: var(--accent); }
-  .recent h2 { font-weight: 400; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; }
+  .socials a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .socials span { color: var(--accent); }
 </style>

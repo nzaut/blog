@@ -1,9 +1,10 @@
 ---
+import Logo from './Logo.astro';
 import { SITE, SOCIALS } from '../consts';
 ---
 
 <footer class="container">
-  <span>© {new Date().getFullYear()} {SITE.name}</span>
+  <span class="sign"><Logo size="1rem" /> © {new Date().getFullYear()} {SITE.name}</span>
   <span class="links">
     {SOCIALS.map((s) => <a href={s.href}>{s.label}</a>)}
     <a href="/rss.xml">RSS</a>
@@ -14,14 +15,17 @@ import { SITE, SOCIALS } from '../consts';
   footer {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    gap: .5rem 1rem;
-    padding-block: 3rem 2rem;
-    margin-top: 5rem;
+    gap: .75rem 1rem;
+    padding-block: 2rem;
+    margin-top: 6rem;
+    border-top: 1px solid var(--border);
     font-family: var(--font-mono);
     font-size: .75rem;
     color: var(--muted);
   }
-  .links { display: flex; gap: 1rem; }
+  .sign { display: flex; align-items: center; gap: .5rem; }
+  .links { display: flex; gap: 1.25rem; }
   a { text-decoration: none; }
 </style>
