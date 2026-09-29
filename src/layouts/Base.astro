@@ -1,0 +1,82 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE.description } = Astro.props;
+const fullTitle = title ? `${title} · ${SITE.name}` : SITE.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <script is:inline>
+      (() => {
+        let t;
+        try { t = localStorage.getItem('theme'); } catch {}
+        if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Render ```mermaid blocks client-side, only on pages that contain some.
+      const sources = document.querySelectorAll<HTMLElement>('pre > code.language-mermaid');
+      if (sources.length) {
+        const blocks = [...sources].map((code) => {
+          const div = document.createElement('div');
+          div.className = 'mermaid';
+          div.dataset.source = code.textContent ?? '';
+          code.parentElement!.replaceWith(div);
+          return div;
+        });
+        const { default: mermaid } = await import('mermaid');
+        const render = async () => {
+          const dark = document.documentElement.dataset.theme === 'dark';
+          mermaid.initialize({ startOnLoad: false, theme: dark ? 'dark' : 'neutral', fontFamily: 'Inter, sans-serif' });
+          for (const el of blocks) {
+            el.removeAttribute('data-processed');
+            el.textContent = el.dataset.source!;
+          }
+          await mermaid.run({ nodes: blocks });
+        };
+        await render();
+        document.addEventListener('themechange', render);
+      }
+    </script>
+  </body>
+</html>

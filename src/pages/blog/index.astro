@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getPosts } from '../../lib/content';
+
+const posts = await getPosts();
+---
+
+<Base title="Writing" description="Articles and longer notes.">
+  <div class="container narrow">
+    <header class="page-head">
+      <h1>Writing</h1>
+      <p>Articles, deep dives and things I learned the hard way.</p>
+    </header>
+    <ul class="entries">
+      {posts.map((p) => (
+        <li>
+          <a href={`/blog/${p.id}`}>
+            <span class="title">{p.data.title}{p.data.draft && ' (draft)'}</span>
+            <FormattedDate date={p.data.date} />
+            <span class="desc">{p.data.description}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>

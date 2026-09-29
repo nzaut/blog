@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getProjects } from '../../lib/content';
+
+const projects = await getProjects();
+---
+
+<Base title="Projects" description="Things I build.">
+  <div class="container">
+    <header class="page-head">
+      <h1>Projects</h1>
+      <p>Things I build, maintain, or abandoned with dignity.</p>
+    </header>
+    <ul class="grid">
+      {projects.map((p) => (
+        <li>
+          <a href={`/projects/${p.id}`} class="card">
+            <span class="meta status" data-status={p.data.status}>{p.data.status}</span>
+            <h2>{p.data.title}</h2>
+            <p>{p.data.description}</p>
+            <span class="meta">{p.data.stack.join(' · ')}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .grid {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+  .card {
+    display: flex; flex-direction: column; gap: .5rem;
+    height: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: background .15s;
+  }
+  .card:hover { background: var(--surface); color: inherit; }
+  .card:hover h2 { color: var(--accent); }
+  h2 { font-size: 1.15rem; margin: .25rem 0 0; }
+  p { margin: 0; color: var(--muted); font-size: .9375rem; flex: 1; }
+  .status::before { content: '●'; margin-right: .4rem; color: var(--muted); }
+  .status[data-status='active']::before { color: #16a34a; }
+  .status[data-status='paused']::before { color: #ca8a04; }
+</style>

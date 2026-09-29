@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getConfigs, getPosts } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const configs = await getConfigs();
+  const items = [
+    ...posts.map((p) => ({ href: `/blog/${p.id}`, title: p.data.title, date: p.data.date, tags: p.data.tags })),
+    ...configs.map((c) => ({ href: `/configs/${c.id}`, title: c.data.title, date: c.data.updated, tags: c.data.tags })),
+  ];
+  const tags = new Set(items.flatMap((i) => i.tags));
+  return [...tags].map((tag) => ({
+    params: { tag },
+    props: { items: items.filter((i) => i.tags.includes(tag)).sort((a, b) => +b.date - +a.date) },
+  }));
+}
+
+const { tag } = Astro.params;
+const { items } = Astro.props;
+---
+
+<Base title={`#${tag}`}>
+  <div class="container narrow">
+    <header class="page-head">
+      <h1>#{tag}</h1>
+    </header>
+    <ul class="entries">
+      {items.map((i) => (
+        <li><a href={i.href}><span class="title">{i.title}</span><FormattedDate date={i.date} /></a></li>
+      ))}
+    </ul>
+  </div>
+</Base>

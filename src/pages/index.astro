@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import { SITE, SOCIALS } from '../consts';
+import { getPosts } from '../lib/content';
+
+const recent = (await getPosts()).slice(0, 3);
+---
+
+<Base>
+  <section class="hero container">
+    <h1 class="display">{SITE.name}</h1>
+    <p class="tagline">{SITE.tagline}</p>
+    <ul class="socials">
+      {SOCIALS.map((s) => <li><a href={s.href}>{s.label} <span aria-hidden="true">↗</span></a></li>)}
+    </ul>
+  </section>
+
+  {recent.length > 0 && (
+    <section class="container recent">
+      <h2 class="meta">Recent writing</h2>
+      <ul class="entries">
+        {recent.map((p) => (
+          <li>
+            <a href={`/blog/${p.id}`}>
+              <span class="title">{p.data.title}</span>
+              <FormattedDate date={p.data.date} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</Base>
+
+<style>
+  .hero {
+    min-height: min(62vh, 36rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: 4rem;
+  }
+  h1 {
+    font-size: clamp(4rem, 16vw, 9.5rem);
+    line-height: .9;
+    margin: 0;
+  }
+  .tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.35rem, 3.2vw, 1.9rem);
+    color: var(--muted);
+    margin: 1.25rem 0 2.5rem;
+    max-width: 30ch;
+    line-height: 1.3;
+  }
+  .socials { list-style: none; display: flex; flex-wrap: wrap; gap: 1.5rem; padding: 0; margin: 0; }
+  .socials a {
+    font-family: var(--font-mono);
+    font-size: .875rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .15rem;
+  }
+  .socials a:hover { border-color: var(--accent); }
+  .recent h2 { font-weight: 400; margin: 0 0 1rem; text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; }
+</style>

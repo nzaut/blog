@@ -1,0 +1,27 @@
+---
+import { SITE, SOCIALS } from '../consts';
+---
+
+<footer class="container">
+  <span>© {new Date().getFullYear()} {SITE.name}</span>
+  <span class="links">
+    {SOCIALS.map((s) => <a href={s.href}>{s.label}</a>)}
+    <a href="/rss.xml">RSS</a>
+  </span>
+</footer>
+
+<style>
+  footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+    padding-block: 3rem 2rem;
+    margin-top: 5rem;
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--muted);
+  }
+  .links { display: flex; gap: 1rem; }
+  a { text-decoration: none; }
+</style>

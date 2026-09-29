@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getConfigs } from '../../lib/content';
+
+const configs = await getConfigs();
+const categories = Map.groupBy(configs, (c) => c.data.category);
+---
+
+<Base title="Configs" description="Reference configurations for the tools I use.">
+  <div class="container narrow">
+    <header class="page-head">
+      <h1>Configs</h1>
+      <p>Annotated reference setups — the baseline I start from, and why each line is there.</p>
+    </header>
+    {[...categories].map(([category, items]) => (
+      <section>
+        <h2 class="meta">{category}</h2>
+        <ul class="entries">
+          {items.map((c) => (
+            <li>
+              <a href={`/configs/${c.id}`}>
+                <span class="title">{c.data.title}</span>
+                <FormattedDate date={c.data.updated} />
+                <span class="desc">{c.data.description}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>
+
+<style>
+  section + section { margin-top: 3rem; }
+  h2 { font-weight: 400; text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; margin: 0 0 1rem; }
+</style>

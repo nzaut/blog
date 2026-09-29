@@ -1,0 +1,52 @@
+---
+import { NAV, SITE } from '../consts';
+const path = Astro.url.pathname;
+const isHome = path === '/';
+---
+
+<header class="site-header container">
+  <a href="/" class="brand" aria-label="Home">{isHome ? '' : SITE.name}</a>
+  <nav aria-label="Main">
+    {NAV.map(({ href, label }) => (
+      <a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>
+    ))}
+    <button id="theme-toggle" type="button" aria-label="Toggle dark mode">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+    </button>
+  </nav>
+</header>
+
+<script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+    document.dispatchEvent(new Event('themechange'));
+  });
+</script>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.5rem;
+  }
+  .brand { font-family: var(--font-display); font-size: 1.35rem; text-decoration: none; }
+  nav { display: flex; align-items: center; gap: clamp(.75rem, 2.5vw, 1.5rem); flex-wrap: wrap; justify-content: flex-end; }
+  nav a { font-size: .9rem; color: var(--muted); text-decoration: none; }
+  nav a:hover, nav a[aria-current] { color: var(--text); }
+  button {
+    display: grid; place-items: center;
+    background: none; border: 0; padding: .25rem; cursor: pointer;
+    color: var(--muted);
+  }
+  button:hover { color: var(--accent); }
+  @media (max-width: 520px) {
+    .site-header { flex-direction: column; align-items: flex-start; }
+    nav { justify-content: flex-start; }
+    .brand:empty { display: none; }
+  }
+</style>
