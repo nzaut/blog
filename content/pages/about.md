@@ -5,7 +5,7 @@ nav: true
 order: 90
 ---
 
-*Write your story here — background, what you work on, what you're looking for.*
+*Coming soon !*
 
 ## Contact
 
