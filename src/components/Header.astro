@@ -4,15 +4,16 @@ import { getNav } from '../lib/content';
 
 const NAV = await getNav();
 const path = Astro.url.pathname;
+const isHome = path === '/';
 ---
 
-<header class="site-header container">
+<header class:list={["site-header container", { home: isHome }]}>
   <a href="/" class="brand" aria-label="Home">
     <Logo size="1.6rem" />
     <span class="wordmark">enzo m<span class="dot">.</span></span>
   </a>
   <nav aria-label="Main">
-    {NAV.map(({ href, label }) => (
+    {!isHome && NAV.map(({ href, label }) => (
       <a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>
     ))}
     <button id="theme-toggle" type="button" aria-label="Toggle dark mode">
@@ -65,7 +66,7 @@ const path = Astro.url.pathname;
   }
   button:hover { color: var(--accent); }
   @media (max-width: 560px) {
-    .site-header { flex-direction: column; align-items: flex-start; }
+    .site-header:not(.home) { flex-direction: column; align-items: flex-start; }
     nav { justify-content: flex-start; }
   }
 </style>

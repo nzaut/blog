@@ -1,10 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import { SITE, SOCIALS } from '../consts';
-import { getPosts } from '../lib/content';
+import { getNav } from '../lib/content';
 
-const recent = (await getPosts()).slice(0, 3);
+const sections = await getNav();
 ---
 
 <Base>
@@ -13,43 +12,38 @@ const recent = (await getPosts()).slice(0, 3);
     <svg class="curve" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
       <path d="M0 560 C 420 560, 700 520, 860 330 S 960 60, 990 0" />
     </svg>
+
     <h1>Enzo M<span class="dot">.</span></h1>
-    <p class="tagline">Building things, <em>writing about how they work.</em></p>
+    <p class="tagline">{SITE.tagline}</p>
+
+    <nav class="sections" aria-label="Sections">
+      {sections.map((s) => (
+        <a href={s.href}>
+          <span>{s.label}</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+        </a>
+      ))}
+    </nav>
+
     <ul class="socials">
       {SOCIALS.map((s) => <li><a href={s.href}>{s.label}<span aria-hidden="true">↗</span></a></li>)}
     </ul>
   </section>
-
-  {recent.length > 0 && (
-    <section class="container recent">
-      <h2 class="eyebrow">Recent writing</h2>
-      <ul class="entries">
-        {recent.map((p) => (
-          <li>
-            <a href={`/blog/${p.id}`}>
-              <span class="title">{p.data.title}</span>
-              <FormattedDate date={p.data.date} />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )}
 </Base>
 
 <style>
   .hero {
     position: relative;
     isolation: isolate;
-    min-height: min(64vh, 38rem);
+    min-height: calc(100dvh - 12rem);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-block: 4rem 5rem;
+    padding-block: 3rem 4rem;
   }
   .curve {
     position: absolute;
-    inset: 8% var(--gutter) 6% 30%;
+    inset: 6% var(--gutter) 4% 34%;
     width: auto; height: auto;
     z-index: -1;
     overflow: visible;
@@ -75,14 +69,34 @@ const recent = (await getPosts()).slice(0, 3);
     margin: 0;
   }
   .tagline {
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+    font-style: italic;
     color: var(--muted);
-    margin: 1.5rem 0 2.5rem;
-    max-width: 24ch;
-    line-height: 1.25;
+    margin: 1.25rem 0 3rem;
+    max-width: 26ch;
+    line-height: 1.3;
     letter-spacing: -0.02em;
   }
-  .tagline em { color: var(--text); }
+
+  .sections { display: flex; flex-direction: column; align-items: flex-start; gap: .1rem; margin-bottom: 3rem; }
+  .sections a {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+  .sections svg {
+    width: .8em; height: .8em;
+    fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+    opacity: 0; transform: translateX(-.5em);
+    transition: opacity .2s, transform .2s;
+  }
+  .sections a:hover svg, .sections a:focus-visible svg { opacity: 1; transform: none; }
+
   .socials { list-style: none; display: flex; flex-wrap: wrap; gap: .75rem; padding: 0; margin: 0; }
   .socials a {
     display: inline-flex; align-items: center; gap: .4rem;
@@ -97,4 +111,7 @@ const recent = (await getPosts()).slice(0, 3);
   }
   .socials a:hover { border-color: var(--accent); background: var(--accent-soft); }
   .socials span { color: var(--accent); }
+
+  @media (max-width: 640px) { .curve { inset: 40% var(--gutter) 30% 10%; opacity: .5; } }
+  @media (hover: none) { .sections svg { opacity: 1; transform: none; } }
 </style>
