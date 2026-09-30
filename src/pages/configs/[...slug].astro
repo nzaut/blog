@@ -9,10 +9,10 @@ export async function getStaticPaths() {
 
 const { config } = Astro.props;
 const { Content } = await render(config);
-const { title, description, updated, tags, category } = config.data;
+const { title, description, date, updated, tags, category } = config.data;
 ---
 
-<Entry {title} {description} date={updated} {tags} back={{ href: '/configs', label: 'Configs' }}>
+<Entry {title} {description} date={updated ?? date} {tags} back={{ href: '/configs', label: 'Configs' }}>
   <span slot="meta" class="meta">· {category}</span>
   <Content />
 </Entry>

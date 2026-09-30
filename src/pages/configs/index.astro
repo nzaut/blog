@@ -21,7 +21,7 @@ const categories = Map.groupBy(configs, (c) => c.data.category);
             <li>
               <a href={`/configs/${c.id}`}>
                 <span class="title">{c.data.title}</span>
-                <FormattedDate date={c.data.updated} />
+                <FormattedDate date={c.data.updated ?? c.data.date} />
                 <span class="desc">{c.data.description}</span>
               </a>
             </li>

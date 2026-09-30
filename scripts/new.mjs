@@ -17,25 +17,25 @@ const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOStr
 
 const TYPES = {
   post: {
-    dir: 'src/content/blog',
+    dir: 'content/blog',
     url: (slug) => `/blog/${slug}`,
     frontmatter: (title) => ({ title, description: '', date: today, tags: [], draft: true }),
     body: 'Start writing here.\n',
   },
   project: {
-    dir: 'src/content/projects',
+    dir: 'content/projects',
     url: (slug) => `/projects/${slug}`,
     frontmatter: (title) => ({ title, description: '', date: today, status: 'active', stack: [], draft: true }),
     body: '## Why\n\n## How it works\n\n## Results\n',
   },
   config: {
-    dir: 'src/content/configs',
+    dir: 'content/configs',
     url: (slug) => `/configs/${slug}`,
     frontmatter: (title) => ({ title, description: '', category: 'Misc', updated: today, tags: [], draft: true }),
     body: '```yaml\n# config here\n```\n\n## Why each choice\n\n- \n',
   },
   page: {
-    dir: 'src/content/pages',
+    dir: 'content/pages',
     url: (slug) => `/${slug}`,
     frontmatter: (title) => ({ title, description: '', nav: true, order: 50 }),
     body: '',

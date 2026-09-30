@@ -23,4 +23,4 @@ Consult these guides before working on related tasks:
 
 ## Project
 
-Personal blog for enzo-m.fr. Content collections in `src/content.config.ts`; design tokens in `src/styles/global.css`; site identity in `src/consts.ts`. Markdown uses the `unified()` processor (remark-math + rehype-katex); mermaid blocks are rendered client-side in `src/layouts/Base.astro`. Deployed by `.github/workflows/deploy.yml`.
+Personal blog for enzo-m.fr. Content is Markdown in `/content` (frontmatter optional; defaults — title from first H1, description from first paragraph, dates from git — in `src/lib/content.ts`; leading H1 stripped by `src/plugins/remark-strip-title.mjs`). Collections in `src/content.config.ts`; design tokens in `src/styles/global.css`; site identity in `src/consts.ts`. Markdown uses the `unified()` processor (remark-math + rehype-katex); mermaid blocks are rendered client-side in `src/layouts/Base.astro`. Deployed by `.github/workflows/deploy.yml`.

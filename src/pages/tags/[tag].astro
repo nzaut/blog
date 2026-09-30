@@ -8,7 +8,7 @@ export async function getStaticPaths() {
   const configs = await getConfigs();
   const items = [
     ...posts.map((p) => ({ href: `/blog/${p.id}`, title: p.data.title, date: p.data.date, tags: p.data.tags })),
-    ...configs.map((c) => ({ href: `/configs/${c.id}`, title: c.data.title, date: c.data.updated, tags: c.data.tags })),
+    ...configs.map((c) => ({ href: `/configs/${c.id}`, title: c.data.title, date: c.data.updated ?? c.data.date, tags: c.data.tags })),
   ];
   const tags = new Set(items.flatMap((i) => i.tags));
   return [...tags].map((tag) => ({

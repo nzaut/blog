@@ -1,13 +1,18 @@
+// Content lives in /content at the repo root. Frontmatter is optional:
+// missing fields are filled in by src/lib/content.ts (title from the first
+// "# Heading" or the filename, dates from git history).
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
+const files = (dir: string) => glob({ base: `./content/${dir}`, pattern: '**/*.{md,mdx}' });
+
 const blog = defineCollection({
-  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+  loader: files('blog'),
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.coerce.date(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    date: z.coerce.date().optional(),
     updated: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
@@ -15,11 +20,11 @@ const blog = defineCollection({
 });
 
 const projects = defineCollection({
-  loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
+  loader: files('projects'),
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    date: z.coerce.date(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    date: z.coerce.date().optional(),
     status: z.enum(['active', 'paused', 'done', 'archived']).default('active'),
     stack: z.array(z.string()).default([]),
     repo: z.string().url().optional(),
@@ -30,25 +35,25 @@ const projects = defineCollection({
 });
 
 const configs = defineCollection({
-  loader: glob({ base: './src/content/configs', pattern: '**/*.{md,mdx}' }),
+  loader: files('configs'),
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    category: z.string(),
-    updated: z.coerce.date(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    category: z.string().default('Misc'),
+    updated: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),
 });
 
-// Standalone pages (about, uses, ...). Each file becomes /<filename>.
+// Standalone pages (about, ...). Each file becomes /<filename>.
 const pages = defineCollection({
-  loader: glob({ base: './src/content/pages', pattern: '**/*.{md,mdx}' }),
+  loader: files('pages'),
   schema: z.object({
-    title: z.string(),
+    title: z.string().optional(),
     description: z.string().optional(),
-    nav: z.boolean().default(false), // show in the header menu
-    order: z.number().default(50),   // menu position, lower = further left
+    nav: z.boolean().default(true), // show in the header menu
+    order: z.number().default(50),  // menu position, lower = further left
     draft: z.boolean().default(false),
   }),
 });

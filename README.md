@@ -10,27 +10,50 @@ npm run build    # production build into dist/
 
 ## Writing
 
-```bash
-npm run new                          # asks what to create
-npm run new post "My title"          # post | project | config | page
-npm run new page "Now" -- --mdx      # .mdx when you need inline SVG / components
+All content is plain Markdown in **`content/`**:
+
+| Folder              | Shows up at        |
+| ------------------- | ------------------ |
+| `content/blog/`     | `/blog/<file>`     |
+| `content/projects/` | `/projects/<file>` |
+| `content/configs/`  | `/configs/<file>`  |
+| `content/pages/`    | `/<file>` + menu   |
+
+### From GitHub (no install)
+
+1. Open the folder on github.com → **Add file** → *Create new file* (or *Upload files*).
+2. Write Markdown. Start with `# Your title`. Check the **Preview** tab.
+3. **Commit changes** → the site rebuilds in ~1 min (Actions tab shows progress; a red ✗ means the file broke the build and the site kept the previous version).
+
+Press **`.`** on the repo page for a full editor in the browser (github.dev).
+
+### The only rules
+
+- **Title** = the first `# Heading` (or the file name). **Description** = first paragraph. **Date** = when the file was first committed. All can be overridden with frontmatter.
+- **Images**: put them next to the file and link relatively — `![alt](./chart.png)` — so they work on GitHub *and* the site. For a post with images, use a folder: `content/blog/my-post/index.md` + `content/blog/my-post/chart.png`.
+- Math `$…$` / `$$…$$` and ` ```mermaid ` blocks render on GitHub and on the site.
+- `.mdx` (inline SVG, components) works on the site but GitHub won't preview it.
+
+### Optional frontmatter
+
+```md
+---
+title: Overrides the # heading
+description: Overrides the first paragraph
+date: 2026-10-01
+tags: [python, trading]
+draft: true          # hidden online, visible with npm run dev
+---
 ```
 
-It creates the file with the right frontmatter (posts, projects and configs start as `draft: true`: visible in `npm run dev`, hidden online until you remove that line).
+Projects also take `status` (active/paused/done/archived), `stack`, `repo`, `url`, `featured`; configs take `category`; pages take `nav: false` to stay out of the menu and `order` to sort it. Full list: `src/content.config.ts`.
 
-| What             | Where                        | URL                |
-| ---------------- | ---------------------------- | ------------------ |
-| Blog post        | `src/content/blog/`          | `/blog/<file>`     |
-| Project          | `src/content/projects/`      | `/projects/<file>` |
-| Reference config | `src/content/configs/`       | `/configs/<file>`  |
-| Page (about, …)  | `src/content/pages/`         | `/<file>`          |
-| Images, SVG, PDF | `public/…` → linked as `/…`  |                    |
+### Locally
 
-- **Menu** — builds itself: Writing / Projects / Configs appear once they have content; pages appear if `nav: true` (position via `order`, lower = left).
-- **Math** — `$inline$` and `$$ block $$` (KaTeX).
-- **Diagrams** — fenced ` ```mermaid ` blocks.
-- **SVG / components** — use `.mdx` and paste raw `<svg>` (use `strokeWidth` not `stroke-width`; colours: `currentColor`, `var(--accent)`).
-- All frontmatter fields are listed in `src/content.config.ts`. Cheat sheet: `src/content/blog/markdown-playground.mdx`.
+```bash
+npm run dev                  # live preview at http://localhost:4321, reloads on save
+npm run new post "Title"     # scaffold: post | project | config | page
+```
 
 ## Design
 
